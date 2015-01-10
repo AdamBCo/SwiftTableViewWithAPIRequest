@@ -18,16 +18,25 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "The TableView"
-        self.navigationController?.navigationBar.barTintColor = UIColor.greenColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.blueColor()
         self.navigationController?.navigationBar.translucent = false
         
-        self.refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        var attributes = [
+            NSForegroundColorAttributeName: UIColor.greenColor(),
+            NSFontAttributeName: UIFont(name: "Avenir", size: 30)!
+        ]
         
-        self.searchItunesFor("DRAFT")
+        self.navigationController?.navigationBar.titleTextAttributes = attributes
+        
+        var refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:"refresh", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl = refreshControl
+        
+        
 
     }
     
-    func refresh(sender:AnyObject)
+    func refresh()
     {
         searchItunesFor(searchTerm)
     }
@@ -40,6 +49,8 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     
     
     func searchItunesFor(searchTerm: String) {
+        
+        
         let itunesSearchTerm = searchTerm.stringByReplacingOccurrencesOfString(" ", withString: "+", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
         if let escapedSearchTerm = itunesSearchTerm.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding) {
             let urlPath = "http://itunes.apple.com/search?term=\(escapedSearchTerm)&media=software"
